@@ -1,6 +1,5 @@
 package org.apoorv.example.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apoorv.example.enums.PaymentTicketStatus;
@@ -8,17 +7,28 @@ import org.apoorv.example.exceptions.ParkingTicketPaidException;
 import org.apoorv.example.strategy.IPaymentModeStrategy;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class ParkingTicket {
-    PaymentTicketStatus ticketStatus;
+    String id;
+    Vehicle vehicle;
+    ParkingSpot parkingSpot;
+    PaymentTicketStatus paymentStatus;
     LocalDateTime entryTime;
     LocalDateTime exitTime;
 
+    public ParkingTicket(Vehicle vehicle, ParkingSpot parkingSpot) {
+        this.id = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        this.vehicle = vehicle;
+        this.parkingSpot = parkingSpot;
+        this.entryTime = LocalDateTime.now();
+        this.paymentStatus = PaymentTicketStatus.PENDING;
+    }
+
     public boolean processParkingTicket(IPaymentModeStrategy paymentModeStrategy){
-        if(ticketStatus == PaymentTicketStatus.UNPAID) {
+        if(paymentStatus == PaymentTicketStatus.UNPAID) {
             double amount = this.calculatePaymentTicketCharges();
             Payment payment = new Payment(paymentModeStrategy, amount);
             return payment.processPayment();

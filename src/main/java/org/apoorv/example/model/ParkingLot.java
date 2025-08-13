@@ -1,9 +1,7 @@
 package org.apoorv.example.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.apoorv.example.enums.ParkingSpotType;
+import org.apoorv.example.enums.VehicleType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +14,7 @@ public class ParkingLot {
     List<ExitPoint> exitPoints;
     private DisplayBoard mainDisplayBoard;
 
-    ParkingLot(String name){
+    ParkingLot(String name) {
         this.name = name;
     }
 
@@ -45,5 +43,25 @@ public class ParkingLot {
         }
 
         mainDisplayBoard.updateAvailability(totalAvailable);
+    }
+
+    public ParkingSpot findAndSetAvailableParkingSpot(VehicleType vehicleType) {
+        // check all floors for vehicle type and if not occupied
+        // mark it occupied and return
+        // update the display board
+
+        ParkingSpot parkingSpot = null;
+
+        for (ParkingFloor floor : floors) {
+            parkingSpot = floor.parkingSpots.stream().filter(
+                     spot -> !spot.isOccupied() && spot.getType().name().equals(vehicleType.name()))
+                    .findFirst().orElse(null);
+            if(parkingSpot!=null) {
+                parkingSpot.setOccupied(true);
+                floor.updateDisplayBoard();
+            }
+        }
+
+        return parkingSpot;
     }
 }

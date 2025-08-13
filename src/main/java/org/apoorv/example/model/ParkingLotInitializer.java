@@ -2,7 +2,7 @@ package org.apoorv.example.model;
 
 import org.apoorv.example.enums.ParkingSpotType;
 
-public class Admin {
+public class ParkingLotInitializer {
     public static ParkingLot initializeParkingLot(String name, int numberOfFloors) {
         ParkingLot parkingLot = new ParkingLot(name);
 
