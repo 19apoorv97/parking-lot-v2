@@ -64,4 +64,15 @@ public class ParkingLot {
 
         return parkingSpot;
     }
+
+    public void freeParkingSpot(ParkingSpot parkingSpot){
+        parkingSpot.setOccupied(false);
+        for(ParkingFloor floor:floors){
+           if(floor.parkingSpots.contains(parkingSpot)){
+               floor.updateDisplayBoard();
+               break;
+           }
+        }
+        updateMainDisplayBoard();
+    }
 }

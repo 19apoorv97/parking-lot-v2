@@ -12,6 +12,9 @@ public class ExitPoint {
     @Autowired
     ParkingAttendent parkingAttendent;
 
+    @Autowired
+    ParkingLot parkingLot;
+
     ExitPoint(int id,String name){
         this.id = id;
         this.name = name;
@@ -23,5 +26,13 @@ public class ExitPoint {
 
     public void payToParkingAttendent(ParkingTicket parkingTicket, IPaymentModeStrategy paymentModeStrategy) {
         parkingAttendent.processParkingTicket(parkingTicket, paymentModeStrategy);
+    }
+
+    public void processExit(Vehicle vehicle,ParkingTicket ticket, IPaymentModeStrategy paymentModeStrategy){
+        if(ticket.getPaymentStatus()!=PaymentTicketStatus.PAID){
+            processParkingTicket(ticket,paymentModeStrategy);
+        }
+
+        parkingLot.freeParkingSpot(ticket.getParkingSpot());
     }
 }
